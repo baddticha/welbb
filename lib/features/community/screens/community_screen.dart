@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:welb/core/widgets/custom_button.dart';
+import 'package:welb/features/community/screens/forum_category.dart';
 
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
@@ -12,7 +13,9 @@ class CommunityScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {},
+            onPressed: () {
+              // TODO: Implement search functionality
+            },
           ),
         ],
       ),
@@ -21,28 +24,40 @@ class CommunityScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Categories Horizontal Scroll
-            _buildCategoryChips(),
+            _buildCategoryChips(context),
             const SizedBox(height: 20),
-
-            // Pinned Posts
             _buildSectionHeader('📌 Pinned Post'),
-            _buildPinnedPost('Community Guidelines'),
-            _buildPinnedPost('How to Get the Most Support'),
+            _buildPinnedPost('Community Guidelines', () {
+              // TODO: Navigate to guidelines
+            }),
+            _buildPinnedPost('How to Get the Most Support', () {
+              // TODO: Navigate to support guide
+            }),
             const SizedBox(height: 20),
-
-            // Recent Discussions
             _buildSectionHeader('🗨️ Recent Discussions'),
-            _buildDiscussionThread('Coping with Anxiety Today', 24, 8, '2h'),
+            _buildDiscussionThread('Coping with Anxiety Today', 24, 8, '2h', () {
+              // TODO: Navigate to thread detail
+            }),
             _buildDivider(),
-            _buildDiscussionThread('My 30-Day Recovery Journey', 56, 12, '5h'),
+            _buildDiscussionThread('My 30-Day Recovery Journey', 56, 12, '5h', () {
+              // TODO: Navigate to thread detail
+            }),
             _buildDivider(),
-            _buildDiscussionThread('Therapist Q: Sleep Tips?', 32, 5, '1d'),
+            _buildDiscussionThread('Therapist Q: Sleep Tips?', 32, 5, '1d', () {
+              // TODO: Navigate to thread detail
+            }),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ForumCategoryScreen(categoryTitle: 'New Post'),
+            ),
+          );
+        },
         child: const Icon(Icons.add),
         backgroundColor: Colors.green[700],
       ),
@@ -58,20 +73,30 @@ class CommunityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryChips() {
+  Widget _buildCategoryChips(BuildContext context) {
     final categories = ['All', 'Support', 'Recovery', 'Stories', 'Q&A', 'Resources'];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: categories.map((category) =>
+        children: categories.map((category) => 
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: Chip(
-                label: Text(category),
-                backgroundColor: category == 'All'
-                    ? Colors.green[100]
-                    : Colors.grey[200],
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForumCategoryScreen(categoryTitle: category),
+                    ),
+                  );
+                },
+                child: Chip(
+                  label: Text(category),
+                  backgroundColor: category == 'All'
+                      ? Colors.green[100]
+                      : Colors.grey[200],
+                ),
               ),
             )
         ).toList(),
@@ -92,17 +117,18 @@ class CommunityScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPinnedPost(String title) {
+  Widget _buildPinnedPost(String title, VoidCallback onTap) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         title: Text(title),
         trailing: const Icon(Icons.chevron_right),
+        onTap: onTap,
       ),
     );
   }
 
-  Widget _buildDiscussionThread(String title, int likes, int comments, String time) {
+  Widget _buildDiscussionThread(String title, int likes, int comments, String time, VoidCallback onTap) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(
@@ -118,7 +144,7 @@ class CommunityScreen extends StatelessWidget {
           _buildMetric(Icons.access_time, null, time),
         ],
       ),
-      onTap: () {}, // Add navigation to thread detail
+      onTap: onTap,
     );
   }
 
