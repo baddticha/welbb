@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "519901734995",
+    "project_id": "welb-939b4",
+    "storage_bucket": "welb-939b4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519901734995:android:1662130332c1e69997fea6",
+        "android_client_info": {
+          "package_name": "com.example.welb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpvZ3cbixp1wagwi37uup3nQE9jAcOOF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

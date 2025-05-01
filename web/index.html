@@ -31,6 +31,27 @@
 
   <title>welb</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC10Rtlb4WAJrHONjbmU7FD_FgXCLr9FqI",
+      authDomain: "welb-939b4.firebaseapp.com",
+      projectId: "welb-939b4",
+      storageBucket: "welb-939b4.firebasestorage.app",
+      messagingSenderId: "519901734995",
+      appId: "1:519901734995:web:01796c4cb79fdec097fea6"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

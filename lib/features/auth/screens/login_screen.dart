@@ -25,21 +25,37 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      // Simulated login
-      final success = await _authService.login(
-        _emailController.text,
-        _passwordController.text,
-      );
-
-      setState(() => _isLoading = false);
-
-      if (success && mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+      try {
+        final success = await _authService.login(
+          _emailController.text,
+          _passwordController.text,
         );
+
+        if (success && mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,39 +119,53 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Checkbox(
-                      value: _rememberMe,
-                      onChanged: (value) => setState(
-                              () => _rememberMe = value ?? false),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (value) =>
+                              setState(() => _rememberMe = value ?? false),
+                        ),
+                        const Text('Remember me'),
+                      ],
                     ),
-                    const Text('Remember me'),
-                    const Spacer(),
                     TextButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const ResetPasswordScreen())),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResetPasswordScreen(),
+                          ),
+                        );
+                      },
                       child: const Text('Forgot Password?'),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 CustomButton(
-                  text: 'Sign In',
-                  onPressed: _submitForm,
+                  text: 'Login',
+                  onPressed: _isLoading ? null : () => _submitForm(),
                   isLoading: _isLoading,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Don't have an account?"),
                     TextButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const SignupScreen())),
-                        child: const Text('Create Account'),
-                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignupScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text('Sign Up'),
+                    ),
                   ],
                 ),
               ],
@@ -144,13 +174,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }
 
